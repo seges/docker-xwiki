@@ -1,0 +1,25 @@
+FROM seges/tomcat:7-jre7
+MAINTAINER gazo@seges.sk
+
+USER root
+
+COPY /conf/context.xml /usr/local/tomcat/conf/context.xml
+COPY /conf/server.xml /usr/local/tomcat/conf/server.xml
+COPY /conf/catalina.properties /usr/local/tomcat/conf/catalina.properties
+COPY /bin /usr/local/tomcat/bin
+
+RUN curl -o /usr/local/tomcat/lib/mail.jar http://mirrors.ibiblio.org/maven2/javax/mail/mail/1.4.1/mail-1.4.1.jar && \
+    curl -o /usr/local/tomcat/lib/postgresql.jar http://mirrors.ibiblio.org/maven2/org/postgresql/postgresql/9.3-1100-jdbc4/postgresql-9.3-1100-jdbc4.jar && \
+    curl -o /usr/local/tomcat/lib/bonecp.jar http://mirrors.ibiblio.org/maven2/com/jolbox/bonecp/0.7.1.RELEASE/bonecp-0.7.1.RELEASE.jar && \
+    curl -o /usr/local/tomcat/lib/bonecp-provider.jar http://mirrors.ibiblio.org/maven2/com/jolbox/bonecp-provider/0.7.1.RELEASE/bonecp-provider-0.7.1.RELEASE.jar
+
+
+RUN curl -o /usr/local/tomcat/webapps/xwiki.war http://download.forge.ow2.org/xwiki/xwiki-enterprise-web-6.1.war
+RUN cd /usr/local/tomcat/webapps; mkdir xwiki; cd xwiki && \
+    unzip ../xwiki.war
+
+COPY /webapps/hibernate.cfg.xml /usr/local/tomcat/webapps/xwiki/WEB-INF/hibernate.cfg.xml
+
+RUN chown -R tomcat:tomcat /usr/local/tomcat
+
+USER tomcat
