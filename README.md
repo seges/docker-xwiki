@@ -11,12 +11,23 @@ Expectations:
 Example of Docker Compose configuration:
 ```
 xwiki:
-  image: seges/xwiki:6.1
+  image: seges/xwiki:7.4
   ports:
     - 8080
   links:
-    - yourdb:db
+    - xwikidb:db
   environment:
-    - DB_USERNAME=dbwiki
+    - DB_USERNAME=xwiki
     - DB_PASSWORD=dbpasswd
+
+xwikidb:
+  image: seges/postgresql:9.4.5
+  volumes:
+    - /opt/docker/xwiki-db/data:/var/lib/postgresql/data
+  environment:
+    - DB_NAMES=xwiki
+    - DB_USERNAME=xwiki
+    - DB_PASSWORD=password
+    - DB_USERNAME_ADMIN=xwikiadmin
+    - DB_PASSWORD_ADMIN=password2
 ```
