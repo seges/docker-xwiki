@@ -17,6 +17,7 @@ xwiki:
   links:
     - xwikidb:db
   environment:
+    - DB_NAME=xwiki
     - DB_USERNAME=xwiki
     - DB_PASSWORD=dbpasswd
 
